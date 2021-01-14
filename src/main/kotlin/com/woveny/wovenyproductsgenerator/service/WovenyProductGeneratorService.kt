@@ -1,8 +1,12 @@
 package com.woveny.wovenyproductsgenerator.service
 
+import com.woveny.wovenyproductsgenerator.constants.CSV_HEADERS_FOR_PILLOW
 import com.woveny.wovenyproductsgenerator.constants.CSV_HEADERS_FOR_RUG
 import com.woveny.wovenyproductsgenerator.domain.SpreadSheetDocument
 import com.woveny.wovenyproductsgenerator.service.property.*
+import com.woveny.wovenyproductsgenerator.service.specials.SpecialsService
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.springframework.stereotype.Service
@@ -11,15 +15,25 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+private val CURRENT_DATE = LocalDateTime.now()
 
 @Service
-class WovenyProductGeneratorService(private val googleDocsService: GoogleDocsService) {
+class WovenyProductGeneratorService(
+    private val googleDocsService: GoogleDocsService,
+    private val specialsService: SpecialsService
+) {
 
     fun generateForRugs(startIndex: String, endIndex: String): Int {
         val spreadSheetDocument = googleDocsService.getRugsDocument(startIndex, endIndex)
 
         val (startSku, endSku) = getStartEndSku(spreadSheetDocument)
-        val csvPrinter = csvPrinter(startSku, endSku)
+        val fileName = "${CURRENT_DATE.format(FORMAT)}-Products($startSku-$endSku)"
+        val extension = ".csv"
+        val csvPrinter = csvPrinter(startSku, endSku, fileName + extension, CSV_HEADERS_FOR_RUG)
+
+        GlobalScope.launch {
+            specialsService.generate(spreadSheetDocument, fileName)
+        }
 
         for (index in spreadSheetDocument.rows.indices) {
             csvPrinter.printRecord(
@@ -65,7 +79,13 @@ class WovenyProductGeneratorService(private val googleDocsService: GoogleDocsSer
         val spreadSheetDocument = googleDocsService.getPillowsDocument(startIndex, endIndex)
 
         val (startSku, endSku) = getStartEndSku(spreadSheetDocument)
-        val csvPrinter = csvPrinter(startSku, endSku)
+        val fileName = "${CURRENT_DATE.format(FORMAT)}-Products($startSku-$endSku)"
+        val extension = ".csv"
+        val csvPrinter = csvPrinter(startSku, endSku, fileName + extension, CSV_HEADERS_FOR_PILLOW)
+
+        GlobalScope.launch {
+            specialsService.generate(spreadSheetDocument, fileName)
+        }
 
         for (index in spreadSheetDocument.rows.indices) {
             csvPrinter.printRecord(
@@ -112,13 +132,12 @@ class WovenyProductGeneratorService(private val googleDocsService: GoogleDocsSer
         return Pair(startSku, endSku)
     }
 
-    private fun csvPrinter(startSku: String, endSku: String): CSVPrinter {
-        val currentDate = LocalDateTime.now()
+    private fun csvPrinter(startSku: String, endSku: String, fileName: String, headers: Array<String>): CSVPrinter {
         val out =
-            FileWriter("${currentDate.format(FORMAT)}-Products($startSku-$endSku).csv")
+            FileWriter(fileName)
         val csvPrinter = CSVPrinter(
             out,
-            CSVFormat.DEFAULT.withDelimiter(';').withHeader(*CSV_HEADERS_FOR_RUG)
+            CSVFormat.DEFAULT.withDelimiter(';').withHeader(*headers)
         )
         return csvPrinter
     }

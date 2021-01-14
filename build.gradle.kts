@@ -14,6 +14,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -30,6 +31,7 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:2.9.2")
 
     implementation("org.apache.commons:commons-csv:1.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

@@ -37,3 +37,18 @@ private val CSV_HEADERS = listOf(
 
 val CSV_HEADERS_FOR_RUG = CSV_HEADERS.toTypedArray()
 val CSV_HEADERS_FOR_PILLOW = CSV_HEADERS.minus("attribute:Size").toTypedArray()
+
+const val MODEL = "SKU"
+const val NAME = "Name"
+const val DESCRIPTION = "Description"
+const val CATEGORY = "Categories"
+const val PRICE = "Price"
+const val LENGTH = "Length"
+const val WIDTH = "Width"
+const val MATERIAL = "Material"
+const val WEAVE = "Weave"
+const val STYLE = "Style"
+const val REGION = "Region"
+const val AGE = "Age"
+const val COLOR = "Color"
+const val SIZE = "Size"

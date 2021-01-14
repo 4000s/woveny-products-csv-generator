@@ -1,22 +1,8 @@
 package com.woveny.wovenyproductsgenerator.service.property
 
+import com.woveny.wovenyproductsgenerator.constants.*
 import com.woveny.wovenyproductsgenerator.domain.SpreadSheetDocument
 import kotlin.math.roundToInt
-
-private const val MODEL = "SKU"
-private const val NAME = "Name"
-private const val DESCRIPTION = "Description"
-private const val CATEGORY = "Categories"
-private const val PRICE = "Price"
-private const val LENGTH = "Length"
-private const val WIDTH = "Width"
-private const val MATERIAL = "Material"
-private const val WEAVE = "Weave"
-private const val STYLE = "Style"
-private const val REGION = "Region"
-private const val AGE = "Age"
-private const val COLOR = "Color"
-private const val SIZE = "Size"
 
 fun generateModel(index: Int, spreadSheetDocument: SpreadSheetDocument) =
     spreadSheetDocument.getCell(index, MODEL)
