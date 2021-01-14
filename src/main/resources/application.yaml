@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Woveny Products Csv Generator
+
+server:
+  port: 4049
+  error:
+    whitelabel:
+      enabled: false
+  compression:
+    enabled: true
+    mime-types: application/json
+  tomcat:
+    threads:
+      max: 500
+
+docs:
+  google:
+    applicationName: Woveny Products Csv Generator
+    rugs-sheet-name: Yeni_Ürün
+    pillows-sheet-name: Ürün
+    rugs-document-id: 1KIiXRRMuLP_tcL6EciVBpfB5qUZbqMjXTYiNCHrGri0
+    pillows-document-id: 1xBor49U7XZd6WOrDvpWvHESPo9YbpwbrxEFIWGhcL1k
+    tokens-directory-path: tokens
+    credentials-file-path: /credentials.json

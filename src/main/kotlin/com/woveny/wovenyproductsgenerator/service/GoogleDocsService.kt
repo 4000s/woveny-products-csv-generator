@@ -13,61 +13,68 @@ import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.google.api.services.sheets.v4.model.ValueRange
+import com.woveny.wovenyproductsgenerator.configuration.GoogleDocsProperties
 import com.woveny.wovenyproductsgenerator.domain.SpreadSheetDocument
 import org.springframework.stereotype.Service
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
 
+private val JSON_FACTORY: JsonFactory = JacksonFactory.getDefaultInstance()
+private val HTTP_TRANSPORT: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
+private val SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS)
+
 @Service
-class GoogleDocsService {
-    private val APPLICATION_NAME: String = "Woveny Application"
-    private val JSON_FACTORY: JsonFactory = JacksonFactory.getDefaultInstance()
-    private val TOKENS_DIRECTORY_PATH: String = "tokens"
+class GoogleDocsService(private val googleDocsProperties: GoogleDocsProperties) {
 
-    private val DOCUMENT_ID: String = "1KIiXRRMuLP_tcL6EciVBpfB5qUZbqMjXTYiNCHrGri0"
-    private val HTTP_TRANSPORT: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
+    private val credentials = getCredentials()
 
+    fun getRugsDocument(startCell: String, endCell: String) = getDocumentFor(
+        startCell,
+        endCell,
+        googleDocsProperties.rugsDocumentId!!,
+        googleDocsProperties.rugsSheetName!!
+    )
 
-    /**
-     * Global instance of the scopes required by this quickstart.
-     * If modifying these scopes, delete your previously saved tokens/ folder.
-     */
-    private val SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS)
-    private val CREDENTIALS_FILE_PATH = "/credentials.json"
+    fun getPillowsDocument(startCell: String, endCell: String) = getDocumentFor(
+        startCell,
+        endCell,
+        googleDocsProperties.pillowsDocumentId!!,
+        googleDocsProperties.pillowsSheetName!!
+    )
 
-    /**
-     * Creates an authorized Credential object.
-     * @param HTTP_TRANSPORT The network HTTP Transport.
-     * @return An authorized Credential object.
-     * @throws IOException If the credentials.json file cannot be found.
-     */
-    private fun getCredentials(): Credential {
-        // Load client secrets.
-        val inputStream: InputStream = GoogleDocsService::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+    fun getDocumentFor(startCell: String, endCell: String, documentId: String, sheetName: String): SpreadSheetDocument {
+        val ranges =
+            listOf("${sheetName}!1:1", "${sheetName}!$startCell:$endCell")
 
-        val clientSecrets: GoogleClientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(inputStream))
+        val service = Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials)
+            .setApplicationName(googleDocsProperties.applicationName).build()
 
-        // Build flow and trigger user authorization request.
-        val flow: GoogleAuthorizationCodeFlow =
-            GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(FileDataStoreFactory(java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build()
-        val receiver: LocalServerReceiver = LocalServerReceiver.Builder().setPort(8888).build()
-        return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
-    }
+        val valueRanges: MutableList<ValueRange> =
+            service.spreadsheets().values()
+                .batchGet(documentId)
+                .setRanges(ranges).execute().valueRanges
 
-    fun getDocumentFor(startCell: String, endCell: String): SpreadSheetDocument {
-        val ranges = Arrays.asList("Yeni_Ürün!1:1", "Yeni_Ürün!$startCell:$endCell")
+        val keyMap: Map<String, Int> = valueRanges.component1().getValues().first()
+            .mapIndexed { index, indexedValue -> indexedValue as String to index }.toMap()
 
-        val service = Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials())
-            .setApplicationName(APPLICATION_NAME).build()
-        val valueRanges: MutableList<ValueRange> = service.spreadsheets().values().batchGet(DOCUMENT_ID).setRanges(ranges).execute().valueRanges
-        val keyMap: Map<String, Int> = valueRanges.first().getValues().first().mapIndexed { index, indexedValue -> indexedValue as String to index }.toMap()
         val dataList = valueRanges.component2().getValues() as List<List<String>>
 
         return SpreadSheetDocument(keyMap, dataList)
     }
 
+    private fun getCredentials(): Credential {
+        val inputStream: InputStream =
+            GoogleDocsService::class.java.getResourceAsStream(googleDocsProperties.credentialsFilePath!!)
+
+        val clientSecrets: GoogleClientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(inputStream))
+
+        val flow: GoogleAuthorizationCodeFlow =
+            GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                .setDataStoreFactory(FileDataStoreFactory(java.io.File(googleDocsProperties.tokensDirectoryPath!!)))
+                .setAccessType("offline")
+                .build()
+        val receiver: LocalServerReceiver = LocalServerReceiver.Builder().setPort(8888).build()
+        return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
+    }
 }
