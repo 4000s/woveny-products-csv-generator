@@ -90,7 +90,7 @@ fun generateWidth(index: Int, spreadSheetDocument: SpreadSheetDocument) =
     "${spreadSheetDocument.getCell(index, WIDTH)}cm"
 
 fun generateMetaKeywordForRugs(index: Int, spreadSheetDocument: SpreadSheetDocument): String {
-    return "Distressed Rug, Oushak Rug, Large Rug, Blue Beige Rug, Vintage Turkish Rug, Oushak Carpet, 9x12 Oushak Rug, Vintage Carpet, Area Rug 9x12, Turkish rug, Vintage Blue Rug, Turkish Vintage Carpet, Blue Rug, 9x12 Blue Rug, ${
+    return "Distressed Rug, Oushak Rug, Large Rug, Blue Beige Rug, Vintage Turkish Rug, Oushak Carpet, Vintage Carpet, Turkish rug, Turkish Vintage Carpet, ${
         generateTagForRugs(
             index,
             spreadSheetDocument
@@ -99,7 +99,7 @@ fun generateMetaKeywordForRugs(index: Int, spreadSheetDocument: SpreadSheetDocum
 }
 
 fun generateMetaKeywordForPillows(index: Int, spreadSheetDocument: SpreadSheetDocument): String {
-    return "Decorative Pillow, Handmade Pillow, Kilim Pillow, Throw Pillow, Turkish Kilim Pillow, Home Decor, Striped Pillow, Colorful Pillows, Hemp Kilim Pillow, 16x16 Pillows, 20x20 Pillows, 16x24 Pillows, Cushion Cover, Pillow Cover, Kilim Pillow Cover, Kilim Cushion Cover, Turkish Handmade Pillows, White Pillows, White Black Pillows, ${
+    return "Decorative Pillow, Handmade Pillow, Kilim Pillow, Throw Pillow, Turkish Kilim Pillow, Home Decor, Striped Pillow, Cushion Cover, Pillow Cover, Kilim Cushion Cover, ${
         generateTagForPillows(
             index,
             spreadSheetDocument
