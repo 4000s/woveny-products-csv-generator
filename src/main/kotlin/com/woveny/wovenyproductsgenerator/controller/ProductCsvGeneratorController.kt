@@ -1,24 +1,29 @@
 package com.woveny.wovenyproductsgenerator.controller
 
+import com.woveny.wovenyproductsgenerator.domain.request.GenerateProductRequest
 import com.woveny.wovenyproductsgenerator.service.WovenyProductGeneratorService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/v1")
 class ProductCsvGeneratorController(private val wovenyProductGeneratorService: WovenyProductGeneratorService) {
 
-    @PostMapping("/v1/rugs/generate/")
+    @PostMapping("/rugs/generate/")
     @ResponseStatus(HttpStatus.OK)
-    fun generateRugs(startIndex: String, endIndex: String): ResponseEntity<String> {
-        return ResponseEntity.ok("Csv generation successfully finished, ${wovenyProductGeneratorService.generateForRugs(startIndex, endIndex)} products created!")
+    fun generateRugs(generateProductRequest: GenerateProductRequest): ResponseEntity<String> {
+        val numberOfRugs = wovenyProductGeneratorService.generateForRugs(generateProductRequest)
+        return ResponseEntity.ok("Csv generation successfully finished, $numberOfRugs products created!")
     }
 
-    @PostMapping("/v1/pillows/generate")
+    @PostMapping("/pillows/generate")
     @ResponseStatus(HttpStatus.OK)
-    fun generatePillows(startIndex: String, endIndex: String): ResponseEntity<String> {
-        return ResponseEntity.ok("Csv generation successfully finished, ${wovenyProductGeneratorService.generateForPillows(startIndex, endIndex)} pillows created!")
+    fun generatePillows(generateProductRequest: GenerateProductRequest): ResponseEntity<String> {
+        val numberOfPillows = wovenyProductGeneratorService.generateForPillows(generateProductRequest)
+        return ResponseEntity.ok("Csv generation successfully finished, $numberOfPillows pillows created!")
     }
 }

@@ -38,3 +38,6 @@ out/
 
 /tokens
 credentials.json
+
+### Os ###
+.DS_Store

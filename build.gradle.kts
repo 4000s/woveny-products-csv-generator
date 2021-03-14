@@ -31,7 +31,13 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:2.9.2")
 
     implementation("org.apache.commons:commons-csv:1.8")
+    implementation ("org.apache.commons:commons-lang3:3.11")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+
+    implementation ("org.seleniumhq.selenium:selenium-java:3.141.59")
+    implementation ("io.github.bonigarcia:webdrivermanager:2.2.1")
+    implementation ("com.google.guava:guava:30.1-jre")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

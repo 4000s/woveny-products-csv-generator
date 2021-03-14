@@ -12,5 +12,5 @@ data class GoogleDocsProperties(
     var rugsDocumentId: String? = null,
     var pillowsDocumentId: String? = null,
     var tokensDirectoryPath: String? = null,
-    var credentialsFilePath: String? = null
+    var credentialsFilePath: String? = null,
 )

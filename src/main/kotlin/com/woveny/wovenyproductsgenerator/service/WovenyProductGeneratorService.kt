@@ -3,6 +3,7 @@ package com.woveny.wovenyproductsgenerator.service
 import com.woveny.wovenyproductsgenerator.constants.CSV_HEADERS_FOR_PILLOW
 import com.woveny.wovenyproductsgenerator.constants.CSV_HEADERS_FOR_RUG
 import com.woveny.wovenyproductsgenerator.domain.SpreadSheetDocument
+import com.woveny.wovenyproductsgenerator.domain.request.GenerateProductRequest
 import com.woveny.wovenyproductsgenerator.service.property.*
 import com.woveny.wovenyproductsgenerator.service.specials.SpecialsService
 import kotlinx.coroutines.GlobalScope
@@ -23,8 +24,9 @@ class WovenyProductGeneratorService(
     private val specialsService: SpecialsService
 ) {
 
-    fun generateForRugs(startIndex: String, endIndex: String): Int {
-        val spreadSheetDocument = googleDocsService.getRugsDocument(startIndex, endIndex)
+    fun generateForRugs(generateProductRequest: GenerateProductRequest): Int {
+        val spreadSheetDocument =
+            googleDocsService.getRugsDocument(generateProductRequest.startIndex, generateProductRequest.endIndex)
 
         val (startSku, endSku) = getStartEndSku(spreadSheetDocument)
         val fileName = "${CURRENT_DATE.format(FORMAT)}-Products($startSku-$endSku)"
@@ -75,8 +77,8 @@ class WovenyProductGeneratorService(
         return spreadSheetDocument.rows.size
     }
 
-    fun generateForPillows(startIndex: String, endIndex: String): Int {
-        val spreadSheetDocument = googleDocsService.getPillowsDocument(startIndex, endIndex)
+    fun generateForPillows(generateProductRequest: GenerateProductRequest): Int {
+        val spreadSheetDocument = googleDocsService.getPillowsDocument(generateProductRequest.startIndex, generateProductRequest.endIndex)
 
         val (startSku, endSku) = getStartEndSku(spreadSheetDocument)
         val fileName = "${CURRENT_DATE.format(FORMAT)}-Products($startSku-$endSku)"
