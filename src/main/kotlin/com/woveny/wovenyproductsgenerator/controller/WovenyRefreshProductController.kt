@@ -28,8 +28,8 @@ class WovenyRefreshProductController(val wovenyRefreshProductService: WovenyRefr
     @ResponseStatus(HttpStatus.OK)
     fun refreshProducts(refreshRequest: RefreshRequest): ResponseEntity<String> {
         webDriver = getWebDriver(refreshRequest.driver)
-
-        return ResponseEntity.ok(wovenyRefreshProductService.refreshProducts(refreshRequest, webDriver!!))
+        wovenyRefreshProductService.refreshProducts(refreshRequest, webDriver!!)
+        return ResponseEntity.ok("Product Refresh has started!")
     }
 
     private fun getWebDriver(requestedDriver: DriverType): WebDriver {

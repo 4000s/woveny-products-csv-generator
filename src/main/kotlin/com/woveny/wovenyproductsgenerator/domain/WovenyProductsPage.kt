@@ -15,9 +15,9 @@ class WovenyProductsPage(private val webDriver: WebDriver) {
     @FindBy(css = "#button-filter")
     private val filterButton: WebElement? = null
 
-    fun findProduct(sku: Int): WovenyProductDetailPage {
+    fun findProduct(sku: String): WovenyProductDetailPage {
         modelInput?.clear()
-        modelInput?.sendKeys(sku.toString())
+        modelInput?.sendKeys(sku)
         filterButton?.click()
         webDriver.waitForPageLoaded()
 
