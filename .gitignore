@@ -39,5 +39,8 @@ out/
 /tokens
 credentials.json
 
+### Csv ###
+*.csv
+
 ### Os ###
 .DS_Store
