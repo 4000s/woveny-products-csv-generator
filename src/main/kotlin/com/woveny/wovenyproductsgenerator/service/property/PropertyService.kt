@@ -191,5 +191,6 @@ private fun cmToHeight(cmString: String): Pair<String, String> {
     val feet = (cm * 0.0328).toInt()
     val remaining = cm - (feet * 30.48)
     val inch = (remaining * 0.3937).roundToInt()
+    if (feet == 0 && inch == 12) return Pair("1", "0")
     return Pair(feet.toString(), inch.toString())
 }
