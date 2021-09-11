@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
 
 class WovenyLoginPage(private val webDriver: WebDriver) {
     init {
@@ -21,7 +23,12 @@ class WovenyLoginPage(private val webDriver: WebDriver) {
     @FindBy(css = ".btn")
     private val loginButton: WebElement? = null
 
+    private val wait = WebDriverWait(webDriver, 10)
+
     fun login(user: String, pass: String): WovenyAdminDashboardPage {
+        wait.until(ExpectedConditions.visibilityOfAllElements(userInput, passInput, loginButton))
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton))
+
         userInput?.clear()
         userInput?.sendKeys(user)
 

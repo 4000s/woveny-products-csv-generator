@@ -73,6 +73,7 @@ class WovenyProductGeneratorService(
                 generateTagForRugs(index, spreadSheetDocument)
             )
         }
+        csvPrinter.flush()
         println("Csv generation successfully finished, ${spreadSheetDocument.rows.size} rugs created!")
         return spreadSheetDocument.rows.size
     }

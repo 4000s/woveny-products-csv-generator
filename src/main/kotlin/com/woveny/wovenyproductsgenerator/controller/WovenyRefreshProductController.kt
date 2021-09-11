@@ -40,7 +40,7 @@ class WovenyRefreshProductController(val wovenyRefreshProductService: WovenyRefr
             }
 
             CHROME -> {
-                WebDriverManager.chromedriver().setup()
+                WebDriverManager.chromedriver().version("93.0.4577.63").setup()
                 ChromeDriver()
             }
 
