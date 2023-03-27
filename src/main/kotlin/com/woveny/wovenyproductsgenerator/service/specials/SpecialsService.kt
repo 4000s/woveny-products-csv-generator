@@ -3,6 +3,7 @@ package com.woveny.wovenyproductsgenerator.service.specials
 import com.woveny.wovenyproductsgenerator.constants.MODEL
 import com.woveny.wovenyproductsgenerator.constants.PRICE
 import com.woveny.wovenyproductsgenerator.domain.SpreadSheetDocument
+import com.woveny.wovenyproductsgenerator.service.property.generateModel
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.springframework.stereotype.Service
@@ -15,19 +16,30 @@ class SpecialsService {
         val out = FileWriter("$fileName-Specials.csv")
         CSVPrinter(out, CSVFormat.DEFAULT.withDelimiter(';').withHeader(*HEADERS)).use { printer ->
             for (index in spreadSheetDocument.rows.indices) {
-                val model = spreadSheetDocument.getCell(index, MODEL)
-                val price = spreadSheetDocument.getCell(index, PRICE)
-                for (i in 0..5) {
-                    val doublePrice = price.toDouble()
-                    val discountedPrice =
-                        doublePrice - doublePrice * TRADE_DISCOUNT_PERCENTAGES[i] / 100.0
-                    printer.printRecord(
-                        model,
-                        TRADE_PROGRAM_NAMES[i],
-                        "1",
-                        discountedPrice,
-                        "0000-00-00",
-                        "0000-00-00"
+                try {
+                    val model = spreadSheetDocument.getCell(index, MODEL)
+                    val price = spreadSheetDocument.getCell(index, PRICE)
+                    for (i in 0..5) {
+                        val doublePrice = price.toDouble()
+                        val discountedPrice =
+                            doublePrice - doublePrice * TRADE_DISCOUNT_PERCENTAGES[i] / 100.0
+                        printer.printRecord(
+                            model,
+                            TRADE_PROGRAM_NAMES[i],
+                            "1",
+                            discountedPrice,
+                            "0000-00-00",
+                            "0000-00-00"
+                        )
+                    }
+                } catch (ex: IndexOutOfBoundsException) {
+                    println(
+                        "SpecialsGenerator, some fields missing for SKU: ${
+                            generateModel(
+                                index,
+                                spreadSheetDocument
+                            )
+                        }"
                     )
                 }
             }

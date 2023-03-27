@@ -13,6 +13,6 @@ class IndexController {
     @GetMapping
     fun redirectToSwaggerUi(response: HttpServletResponse): RedirectView {
         response.setHeader("Cache-Control", "no-cache")
-        return RedirectView("/swagger-ui.html")
+        return RedirectView("/swagger-ui/")
     }
 }

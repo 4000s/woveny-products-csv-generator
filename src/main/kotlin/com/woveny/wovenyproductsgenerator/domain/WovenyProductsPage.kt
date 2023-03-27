@@ -22,7 +22,7 @@ class WovenyProductsPage(private val webDriver: WebDriver) {
 
     private val jsExecutor = webDriver as JavascriptExecutor
 
-    private val wait = WebDriverWait(webDriver, 10)
+    private val wait = WebDriverWait(webDriver, 2)
 
     fun findProduct(sku: String): WovenyProductDetailPage {
         wait.until(ExpectedConditions.visibilityOfAllElements(modelInput, filterButton))

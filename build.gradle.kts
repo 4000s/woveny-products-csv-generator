@@ -23,21 +23,21 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("com.google.api-client:google-api-client:1.30.4")
-    implementation("com.google.oauth-client:google-oauth-client-jetty:1.30.6")
-    implementation("com.google.apis:google-api-services-sheets:v4-rev581-1.25.0")
+    implementation("com.google.api-client:google-api-client:2.2.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20230227-2.0.0")
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
-    implementation("io.springfox:springfox-swagger-ui:2.9.2")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
-    implementation("org.apache.commons:commons-csv:1.8")
-    implementation ("org.apache.commons:commons-lang3:3.11")
+    implementation("org.apache.commons:commons-csv:1.10.0")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
 
-    implementation ("org.seleniumhq.selenium:selenium-java:3.141.59")
-    implementation ("io.github.bonigarcia:webdrivermanager:2.2.1")
-    implementation ("com.google.guava:guava:30.1-jre")
+    implementation("org.seleniumhq.selenium:selenium-java:4.8.3")
+    implementation("io.github.bonigarcia:webdrivermanager:5.3.2")
+    implementation("com.google.guava:guava:31.1-jre")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

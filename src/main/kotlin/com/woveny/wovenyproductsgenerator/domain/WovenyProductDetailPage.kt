@@ -12,7 +12,7 @@ class WovenyProductDetailPage(private val webDriver: WebDriver) {
     @FindBy(css = "div.pull-right > button:nth-child(1)")
     private val saveButton: WebElement? = null
 
-    private val wait = WebDriverWait(webDriver, 10)
+    private val wait = WebDriverWait(webDriver, 2)
 
     fun saveAndClose() {
         wait.until(ExpectedConditions.visibilityOfAllElements(saveButton))

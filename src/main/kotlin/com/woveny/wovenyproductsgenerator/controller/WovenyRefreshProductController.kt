@@ -1,16 +1,9 @@
 package com.woveny.wovenyproductsgenerator.controller
 
-import com.woveny.wovenyproductsgenerator.domain.DriverType
-import com.woveny.wovenyproductsgenerator.domain.DriverType.*
 import com.woveny.wovenyproductsgenerator.domain.request.RefreshRequest
 import com.woveny.wovenyproductsgenerator.service.WovenyRefreshProductService
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.edge.EdgeDriver
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.ie.InternetExplorerDriver
-import org.openqa.selenium.opera.OperaDriver
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,37 +20,8 @@ class WovenyRefreshProductController(val wovenyRefreshProductService: WovenyRefr
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
     fun refreshProducts(refreshRequest: RefreshRequest): ResponseEntity<String> {
-        webDriver = getWebDriver(refreshRequest.driver)
+        webDriver = WebDriverManager.getInstance(refreshRequest.driver).create()
         wovenyRefreshProductService.refreshProducts(refreshRequest, webDriver!!)
         return ResponseEntity.ok("Product Refresh has started!")
-    }
-
-    private fun getWebDriver(requestedDriver: DriverType): WebDriver {
-        return when (requestedDriver) {
-            FIREFOX -> {
-                WebDriverManager.firefoxdriver().setup()
-                FirefoxDriver()
-            }
-
-            CHROME -> {
-                WebDriverManager.chromedriver().version("93.0.4577.63").setup()
-                ChromeDriver()
-            }
-
-            OPERA -> {
-                WebDriverManager.operadriver().setup()
-                OperaDriver()
-            }
-
-            EDGE -> {
-                WebDriverManager.edgedriver().setup()
-                EdgeDriver()
-            }
-
-            I_EXPLORER -> {
-                WebDriverManager.iedriver().setup()
-                InternetExplorerDriver()
-            }
-        }
     }
 }

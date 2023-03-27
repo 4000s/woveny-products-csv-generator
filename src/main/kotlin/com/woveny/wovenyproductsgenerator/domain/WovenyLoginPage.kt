@@ -23,7 +23,7 @@ class WovenyLoginPage(private val webDriver: WebDriver) {
     @FindBy(css = ".btn")
     private val loginButton: WebElement? = null
 
-    private val wait = WebDriverWait(webDriver, 10)
+    private val wait = WebDriverWait(webDriver, 2)
 
     fun login(user: String, pass: String): WovenyAdminDashboardPage {
         wait.until(ExpectedConditions.visibilityOfAllElements(userInput, passInput, loginButton))

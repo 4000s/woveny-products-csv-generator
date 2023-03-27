@@ -3,6 +3,8 @@ package com.woveny.wovenyproductsgenerator.service
 import com.woveny.wovenyproductsgenerator.domain.WovenyLoginPage
 import com.woveny.wovenyproductsgenerator.domain.request.RefreshRequest
 import com.woveny.wovenyproductsgenerator.exception.ElementNotFoundException
+import org.openqa.selenium.NoSuchElementException
+import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -25,6 +27,13 @@ class WovenyRefreshProductService {
             } catch (ex: ElementNotFoundException) {
                 println("Product with sku: $modifiedSku not found!")
                 continue
+            } catch (ex: TimeoutException) {
+                if (ex.cause is NoSuchElementException) {
+                    println("Product with sku: $modifiedSku not found!")
+                    continue
+                } else {
+                    throw ex
+                }
             }
 
             wovenyProductDetailPage.saveAndClose()

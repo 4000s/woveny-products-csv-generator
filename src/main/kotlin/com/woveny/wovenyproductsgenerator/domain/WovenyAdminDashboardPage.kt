@@ -14,7 +14,7 @@ class WovenyAdminDashboardPage(private val webDriver: WebDriver) {
     @FindBy(css = "#menu-catalog > a:nth-child(1)")
     private val catalog: WebElement? = null
 
-    private val wait = WebDriverWait(webDriver, 10)
+    private val wait = WebDriverWait(webDriver, 2)
 
     fun clickOnProducts(): WovenyProductsPage {
         wait.until(ExpectedConditions.visibilityOfAllElements(catalog))
